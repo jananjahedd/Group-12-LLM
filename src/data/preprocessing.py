@@ -16,7 +16,8 @@ log_dir.mkdir(parents=True, exist_ok=True)
 logs_path = log_dir / 'preprocessing_info.log'
 
 format_style = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-logging.basicConfig(filename = logs_path, level=logging.INFO, format=format_style)
+logging.basicConfig(filename=logs_path, level=logging.INFO,
+                    format=format_style)
 
 
 class Logger:
@@ -35,7 +36,8 @@ class Logger:
 
 
 class DatasetsLoader:
-    def __init__(self, data_name: str, output_dir: str = 'data/', unzip: bool = True) -> None:
+    def __init__(self, data_name: str, output_dir: str = 'data/', unzip:
+                 bool = True) -> None:
         """
         Initializes the DatasetsLoader class.
 
@@ -46,7 +48,8 @@ class DatasetsLoader:
         self.data_name = data_name
         self.output_dir = output_dir
         self.unzip = unzip
-        self.output_path = os.path.join(output_dir, data_name.split('/')[-1] + '.zip')
+        self.output_path = os.path.join(output_dir, data_name.split('/')[-1] +
+                                        '.zip')
         Logger.log_info("Initializing class for downloading the aggle data.")
 
         # ensure the directory exists
@@ -54,18 +57,21 @@ class DatasetsLoader:
             os.makedirs(self.output_dir)
 
         self._check_credentials()
-    
+
     def _check_credentials(self) -> None:
         """Checks the credentials for downloading the data."""
         kaggle_file = "~/.kaggle/kaggle.json"
         if not os.path.exists(os.path.expanduser(kaggle_file)):
-            raise FileNotFoundError("Kaggle API key not found. Please follow " +
-                                    "the setup instructions in the README.")
+            raise FileNotFoundError("Kaggle API key not found. Please" +
+                                    "follow the setup instructions in" +
+                                    "the README.")
 
     def download_data(self) -> None:
         """Downloads the datasets."""
-        Logger.log_info(f"Downloading the datasets {self.data_name} to {self.output_dir}")
-        kaggle.api.dataset_download_files(self.data_name, path=self.output_dir, unzip=False)
+        Logger.log_info(f"Downloading the datasets {self.data_name} to" +
+                        f"{self.output_dir}")
+        kaggle.api.dataset_download_files(self.data_name, path=self.output_dir,
+                                          unzip=False)
 
         if self.unzip:
             self._unzip_data()
