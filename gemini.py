@@ -10,7 +10,10 @@ import google.generativeai as genai
 
 # https://aistudio.google.com/u/1/prompts/1M9GUN91npG1SrTFa5CFIYcrEco0WZJdd
 # API key added to the shell - AIzaSyD57QVLY57pt6UphqMnm5iGz2i_Uff0Tik
-genai.configure(api_key=os.environ["API_KEY"])
+# export GEMINI_API_KEY=AIzaSyD57QVLY57pt6UphqMnm5iGz2i_Uff0Tik
+# echo $GEMINI_API_KEY
+# python3 gemini.py
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 
 generation_config = {
   "temperature": 1,
