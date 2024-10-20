@@ -40,8 +40,4 @@ mkdir /Users/<Your-Username>/.kaggle/
 mv /path/to/kaggle.json /Users/<Your-Username>/.kaggle/kaggle.json
 ```
 
-Then to install the dataset locally on the computer, run the following line in the terminal:
-```sh
-kaggle datasets download danofer/sarcasm -p data/
-```
-This will download the `sarcasm.zip` file directly in the `data/` folder.
+Executing the `preprocessin.py` file will download the `sarcasm.zip` file directly in the `data/` folder.
