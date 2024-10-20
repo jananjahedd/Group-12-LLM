@@ -16,3 +16,4 @@ dependencies:
     - google-generative-ai
     - torch
     - transformers
+    - kaggle
