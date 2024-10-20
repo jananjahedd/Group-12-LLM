@@ -11,3 +11,9 @@ dependencies:
 
   - pip:
     - openai
+    - google-cloud-aiplatform
+    - google-cloud-gemini
+    - google-generative-ai
+    - torch
+    - transformers
+    - kaggle
