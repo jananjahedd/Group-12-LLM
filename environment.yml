@@ -8,6 +8,7 @@ dependencies:
   - pandas
   - numpy
   - ipykernel
+  - scikit-learn
   - pip
 
   - pip:
@@ -20,3 +21,6 @@ dependencies:
     - kaggle
     - matplotlib
     - genai
+    - nltk
+    - contractions
+    - textblob
