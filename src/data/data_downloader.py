@@ -32,7 +32,7 @@ class Logger:
 
 
 class DatasetsLoader:
-    def __init__(self, data_name: str, output_dir: str = 'data/raw/',
+    def __init__(self, data_name: str, output_dir: str,
                  unzip: bool = True) -> None:
         """
         Initializes the DatasetsLoader class.
@@ -82,5 +82,8 @@ class DatasetsLoader:
 
 
 if __name__ == "__main__":
-    dataset_loader = DatasetsLoader(data_name='danofer/sarcasm')
+    output_dir = root / 'data' / 'raw'
+    output_dir.mkdir(parents=True, exist_ok=True)
+    dataset_loader = DatasetsLoader(data_name='danofer/sarcasm',
+                                    output_dir=output_dir)
     dataset_loader.download_data()
