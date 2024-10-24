@@ -7,13 +7,20 @@ dependencies:
   - python=3.8
   - pandas
   - numpy
+  - ipykernel
+  - scikit-learn
   - pip
 
   - pip:
     - openai
     - google-cloud-aiplatform
     - google-cloud-gemini
-    - google-generative-ai
+    - google.generativeai
     - torch
     - transformers
     - kaggle
+    - matplotlib
+    - genai
+    - nltk
+    - contractions
+    - textblob
