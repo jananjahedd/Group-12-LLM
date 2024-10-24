@@ -12,15 +12,11 @@ dependencies:
   - pip
 
   - pip:
-    - openai
-    - google-cloud-aiplatform
-    - google-cloud-gemini
-    - google.generativeai
-    - torch
     - transformers
     - kaggle
     - matplotlib
-    - genai
     - nltk
     - contractions
     - textblob
+    - datasets
+    - peft

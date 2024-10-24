@@ -32,16 +32,15 @@ class Logger:
 
 
 class FeatureEngineering:
-    def __init__(self) -> None:
+    def __init__(self, data_path: str, suffix: str) -> None:
         Logger.log_info("Feature engineering class is initialized.")
-        self._df = self._data_loader().copy(deep=True)
+        self._df = self._data_loader(data_path).copy(deep=True)
+        self.suffix = suffix
 
-    def _data_loader(self) -> pd.DataFrame:
+    def _data_loader(self, path: str) -> pd.DataFrame:
         """Loads the data from the data/processed folder."""
-        data_path = root / 'data' / 'processed' / 'processed_sarcasm.csv'
-
         try:
-            data = pd.read_csv(data_path, sep=',')
+            data = pd.read_csv(path, sep=',')
             Logger.log_info("The data has been loaded successfully.")
             return data
         except Exception as e:
@@ -112,12 +111,14 @@ class FeatureEngineering:
             Logger.log_info("Successfully split the data into " +
                             "training and testing.")
 
-            splits_dir = root / 'data' / 'processed'
+            splits_dir = root / 'data' / 'splits'
             splits_dir.mkdir(parents=True, exist_ok=True)
 
             # save the datasets
-            train_df.to_csv(splits_dir / 'train_data.csv', index=False)
-            test_df.to_csv(splits_dir / 'test_data.csv', index=False)
+            train_df.to_csv(splits_dir / f'train_data_{self.suffix}.csv',
+                            index=False)
+            test_df.to_csv(splits_dir / f'test_data_{self.suffix}.csv',
+                           index=False)
             Logger.log_info(f"The datasets were saved at {splits_dir}")
 
             return train_df, test_df
@@ -131,7 +132,7 @@ class FeatureEngineering:
         try:
             output_dir = root / 'data' / 'processed'
             output_dir.mkdir(parents=True, exist_ok=True)
-            output_path = output_dir / 'normalized_sarcasm.csv'
+            output_path = output_dir / f'normalized_sarcasm_{self.suffix}.csv'
             self._df.to_csv(output_path, index=False)
             Logger.log_info("Successfully saved the modified " +
                             f"data at {output_path}")
@@ -142,10 +143,16 @@ class FeatureEngineering:
 
 if __name__ == "__main__":
     """Executer feature engineering on the preprocessed data."""
-    engineer = FeatureEngineering()
-    engineer.add_comment_length()
-    engineer.add_sentiment()
-    engineer.add_time()
-    engineer.scale_data()
-    engineer._save_data()
-    engineer._splitting()
+    processed_dir = root / 'data' / 'processed'
+    bert_path = processed_dir / 'processed_sarcasm_bert.csv'
+    distilbert_path = processed_dir / 'processed_sarcasm_distilbert.csv'
+    paths = [(bert_path, 'bert'), (distilbert_path, 'distilbert')]
+
+    for data_path, suffix in paths:
+        engineer = FeatureEngineering(data_path, suffix)
+        engineer.add_comment_length()
+        engineer.add_sentiment()
+        engineer.add_time()
+        engineer.scale_data()
+        engineer._save_data()
+        engineer._splitting()
