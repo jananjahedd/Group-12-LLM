@@ -24,3 +24,4 @@ dependencies:
     - nltk
     - contractions
     - textblob
+    - transformers

@@ -43,24 +43,6 @@ class DataPreprocessing:
         Logger.log_info("Preprocessing class is initialized.")
         self._df = self._data_loader()
 
-<<<<<<< HEAD
-class DatasetsLoader:
-    def __init__(self, data_name: str, output_dir: str = 'data/', unzip:
-                 bool = True) -> None:
-        """
-        Initializes the DatasetsLoader class.
-
-        :param data_name: name of the Kaggle data.
-        :param output_dir: the directory for the data.
-        :param unzip: boolean to decide whether to open the data.
-        """
-        self.data_name = data_name
-        self.output_dir = output_dir
-        self.unzip = unzip
-        self.output_path = os.path.join(output_dir, data_name.split('/')[-1] +
-                                        '.zip')
-        Logger.log_info("Initializing class for downloading the aggle data.")
-=======
     def _data_loader(self) -> pd.DataFrame:
         """Loads the data from the data/ folder."""
         data_path = root / 'data' / 'raw' / 'train-balanced-sarcasm.csv'
@@ -72,7 +54,6 @@ class DatasetsLoader:
         except Exception as e:
             Logger.log_error(f"Error while loading the data: {str(e)}")
             return pd.DataFrame()
->>>>>>> origin/mede-branch
 
     def handle_missing_values(self) -> None:
         """Drops the rows where there are missing columns (55)."""
@@ -81,24 +62,6 @@ class DatasetsLoader:
             Logger.log_info(f"Found {missing_values} missing comments " +
                             "in the data. Dropping them...")
 
-<<<<<<< HEAD
-        self._check_credentials()
-
-    def _check_credentials(self) -> None:
-        """Checks the credentials for downloading the data."""
-        kaggle_file = "~/.kaggle/kaggle.json"
-        if not os.path.exists(os.path.expanduser(kaggle_file)):
-            raise FileNotFoundError("Kaggle API key not found. Please" +
-                                    "follow the setup instructions in" +
-                                    "the README.")
-
-    def download_data(self) -> None:
-        """Downloads the datasets."""
-        Logger.log_info(f"Downloading the datasets {self.data_name} to" +
-                        f"{self.output_dir}")
-        kaggle.api.dataset_download_files(self.data_name, path=self.output_dir,
-                                          unzip=False)
-=======
             self._df.dropna(subset=['comment', 'parent_comment'], inplace=True)
             Logger.log_info("Successfully handled missing values.")
         except Exception as e:
@@ -116,7 +79,6 @@ class DatasetsLoader:
             )
             Logger.log_info("Successfully expanded the contractions in " +
                             "both 'comment' and 'parent_comment' columns.")
->>>>>>> origin/mede-branch
 
         except Exception as e:
             Logger.log_error(f"Error while expanding contractions: {str(e)}")
@@ -201,10 +163,6 @@ class DatasetsLoader:
 
 
 if __name__ == "__main__":
-<<<<<<< HEAD
-    dataset_loader = DatasetsLoader(data_name='danofer/sarcasm')
-    dataset_loader.download_data()
-=======
     """Preprocess the sarcasm data."""
     preprocessor = DataPreprocessing()
     preprocessor.handle_missing_values()
@@ -213,4 +171,3 @@ if __name__ == "__main__":
     preprocessor.remove_punctuation()
     preprocessor.tokenization()
     preprocessor._save_data()
->>>>>>> origin/mede-branch
