@@ -46,6 +46,6 @@ To run the code:
 - first run the `data_donwloader.py` file which will download the SARC dataset from kaggle.
 - Then run `preprocessing.py` to preprocess the raw dataset.
 - After the processed data is saved, run `feature_engineering.py` to get the data splits and more information about the dataset's features.
-- Lastly, you can run each model separately (bert.py, distilbert.py, prompt_bert.py, prompt_distilbert.py) to observe the performance.
+- Lastly, you can run each model separately (`bert.py`, `distilbert.py`, `prompt_bert.py`, `prompt_distilbert.py`) to observe the performance.
 
 **It is recommended to run the models using a computer cluster (such as Habrok from the University of Groningen) or on a cloud computing platform since they are large models and require a strong GPU to run.**
