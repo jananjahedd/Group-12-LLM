@@ -1,6 +1,8 @@
 """
 File: feature_engineering.py
-Description:
+Authors: Andrei Medesan, Janan Jahed, and Alexandru Cernat
+Description: Adds labels, splits the data and normalizes
+the numrical features in the dataset.
 """
 import pandas as pd
 import logging
