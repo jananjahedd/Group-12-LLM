@@ -151,7 +151,6 @@ if __name__ == "__main__":
         engineer = FeatureEngineering(data_path, suffix)
         engineer.add_comment_length()
         engineer.add_sentiment()
-        engineer.add_time()
         engineer._save_data()
         train, test = engineer._splitting()
         engineer.scale_data(train, test)
