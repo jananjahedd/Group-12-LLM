@@ -1,7 +1,8 @@
 """
 File: preprocessing.py
 Authors: Andrei Medesan, Janan Jahed, and Alexandru Cernat
-Description:
+Description: Preprocesses the data by handling missing values
+and transforms the text data for model training.
 """
 import pandas as pd
 import logging
