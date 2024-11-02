@@ -20,3 +20,10 @@ dependencies:
     - textblob
     - datasets
     - peft
+    - os
+    - logging 
+    - torch
+    - pathlib 
+    - pandas
+    - sklearn.metrics
+    - optuna
