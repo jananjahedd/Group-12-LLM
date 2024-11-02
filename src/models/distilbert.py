@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 import optuna
 import torch
@@ -7,6 +9,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+from typing import Optional, Tuple
 from torch.utils.data import Dataset, DataLoader
 from tqdm import tqdm
 from pathlib import Path
@@ -27,17 +30,17 @@ logging.basicConfig(filename=logs_path, level=logging.INFO,
 
 
 class SarcasmDataset(Dataset):
-    def __init__(self, tokens, labels):
+    def __init__(self, tokens=None, labels=None) -> None:
         self.tokens = tokens
         self.labels = labels
         self.tokenizer = DistilBertTokenizer.from_pretrained(
             'distilbert-base-uncased'
         )
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.tokens)
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx: int):
         tokens = self.tokens[idx]
         label = self.labels[idx]
 
@@ -54,6 +57,42 @@ class SarcasmDataset(Dataset):
             'attention_mask': inputs['attention_mask'].squeeze(),
             'labels': torch.tensor(label, dtype=torch.long)
         }
+
+    def create_subsets(
+        self,
+        val_size: float = 0.3,
+        train_indices: Optional[np.ndarray] = None,
+        val_indices: Optional[np.ndarray] = None
+    ) -> Tuple[SarcasmDataset, SarcasmDataset]:
+        tokens = np.array(self.tokens)
+        labels = np.array(self.labels)
+
+        if train_indices is not None and val_indices is not None:
+            tokens_t = tokens[train_indices]
+            labels_t = labels[train_indices]
+            tokens_v = tokens[val_indices]
+            labels_v = labels[val_indices]
+        else:
+            tokens_t, tokens_v, labels_t, labels_v = train_test_split(
+                tokens, labels, test_size=val_size, random_state=42
+            )
+
+        train_subset = SarcasmDataset(tokens_t, labels_t)
+        val_subset = SarcasmDataset(tokens_v, labels_v)
+
+        return train_subset, val_subset
+
+    def reduce_dataset(self, data_size) -> SarcasmDataset:
+        tokens = np.array(self.tokens)
+        labels = np.array(self.labels)
+
+        tokens, _, labels, _ = train_test_split(
+            tokens, labels, train_size=data_size, random_state=42
+        )
+
+        data = SarcasmDataset(tokens, labels)
+
+        return data
 
 
 def train_model(model, train_loader, val_loader, num_epochs, learning_rate):
@@ -175,6 +214,8 @@ def evaluate_model(model, test_dataset):
 
                 outputs = model(input_ids, attention_mask=attention_mask)
                 logits = outputs.logits
+                _, preds = torch.max(outputs.logits, dim=1)
+
                 all_logits.extend(logits.cpu().numpy())
 
                 probabilities = torch.nn.functional.softmax(
@@ -182,10 +223,12 @@ def evaluate_model(model, test_dataset):
                 )[:, 1].cpu().numpy()
                 all_probabilities.extend(probabilities.tolist())
 
-                predictions.extend(torch.argmax(logits, dim=1).tolist())
+                predictions.extend(preds.cpu().tolist())
                 true_labels.extend(labels.cpu().tolist())
 
-                tepoch.set_postfix(batch_idx=batch_idx)
+                test_accuracy = accuracy_score(true_labels, predictions)
+
+                tepoch.set_postfix(batch_idx=batch_idx, accuracy=test_accuracy)
 
     accuracy = accuracy_score(true_labels, predictions)
     f1 = f1_score(true_labels, predictions, average='binary')
@@ -218,7 +261,9 @@ def evaluate_model(model, test_dataset):
 
 
 def k_fold_cross_validation(
-        model, data, k_folds=8,
+        model,
+        data: SarcasmDataset,
+        k_folds=8,
         num_epochs=1,
         learning_rate=3e-5
 ):
@@ -227,10 +272,13 @@ def k_fold_cross_validation(
 
     logging.info(f"Starting {k_folds}-fold cross-validation...")
 
-    for fold, (_, _) in enumerate(kf.split(data)):
+    for fold, (train_indices, val_indices) in enumerate(kf.split(data, )):
         logging.info(f"Fold {fold + 1}/{k_folds}")
 
-        training, validation = create_subsets(data, val_size=0.3)
+        training, validation = data.create_subsets(
+            train_indices=train_indices,
+            val_indices=val_indices
+        )
 
         train_loader = DataLoader(training, batch_size=32, shuffle=True)
         val_loader = DataLoader(validation, batch_size=32)
@@ -252,36 +300,6 @@ def k_fold_cross_validation(
     )
 
     return avg_accuracy
-
-
-def create_subsets(data: SarcasmDataset, val_size):
-    tokens = np.array(data.tokens)
-    labels = np.array(data.labels)
-
-    tokens_train, tokens_val, labels_train, labels_val = train_test_split(
-        tokens, labels, test_size=val_size, random_state=42
-    )
-
-    train_subset = SarcasmDataset(tokens_train, labels_train)
-    val_subset = SarcasmDataset(tokens_val, labels_val)
-
-    return train_subset, val_subset
-
-
-def reduce_dataset(data: SarcasmDataset, data_size):
-    tokens = np.array(data.tokens)
-    labels = np.array(data.labels)
-
-    tokens, _, labels, _ = train_test_split(
-        tokens, labels, train_size=data_size, random_state=42
-    )
-
-    data = SarcasmDataset(tokens, labels)
-
-    if hasattr(data, 'reset_index'):
-        data.reset_index(drop=True, inplace=True)
-
-    return data
 
 
 def objective(trial):
@@ -310,10 +328,14 @@ def objective(trial):
 
     logging.info("Creating subsets...")
 
-    training, validation = create_subsets(peft_data, val_size=0.3)
+    peft_data = train.reduce_dataset(data_size=0.1)
+    training, validation = peft_data.create_subsets(val_size=0.3)
 
     train_loader = DataLoader(training, batch_size=32, shuffle=True)
     val_loader = DataLoader(validation, batch_size=64)
+
+    model = DistilBertForSequenceClassification.from_pretrained(
+        'distilbert-base-uncased', num_labels=2)
 
     logging.info("Getting the PEFT model...")
 
@@ -336,27 +358,19 @@ def objective(trial):
 
 if __name__ == "__main__":
     train_df = pd.read_csv(
-        '/Users/apple/Desktop/Group-12-LLM/data/processed/train_data.csv')
+        'data/splits/train_data_distilbert.csv')
     test_df = pd.read_csv(
-        '/Users/apple/Desktop/Group-12-LLM/data/processed/test_data.csv')
-
-    train_df['features'] = train_df.drop(
-        columns=['label']
-    ).astype(str).agg(' '.join, axis=1)
-    test_df['features'] = test_df.drop(
-        columns=['label']
-    ).astype(str).agg(' '.join, axis=1)
+        'data/splits/test_data_distilbert.csv')
 
     train = SarcasmDataset(
-        tokens=train_df['features'],
+        tokens=train_df['comment_tokenized'],
         labels=train_df['label']
     )
     test = SarcasmDataset(
-        tokens=test_df['features'],
+        tokens=test_df['comment_tokenized'],
         labels=test_df['label']
     )
 
-    peft_data = reduce_dataset(train, data_size=0.1)
     study = optuna.create_study(direction="maximize")
     study.optimize(objective, n_trials=3)
 
@@ -367,8 +381,8 @@ if __name__ == "__main__":
 
     lora_config = LoraConfig(
         task_type=TaskType.SEQ_CLS,
-        r=32,
-        lora_alpha=64,
+        r=8,
+        lora_alpha=16,
         lora_dropout=0.1,
         target_modules=["q_lin", "v_lin"]
     )
