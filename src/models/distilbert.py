@@ -1,3 +1,10 @@
+"""
+File: distilbert.py
+Authors: Andrei Medesan, Janan Jahed, and Alexandru Cernat
+Description:
+Performs LoRA Fine-Tuning on the DistilBERT model
+"""
+
 from __future__ import annotations
 
 import logging
@@ -30,6 +37,12 @@ logging.basicConfig(filename=logs_path, level=logging.INFO,
 
 
 class SarcasmDataset(Dataset):
+    """
+    Creates a labelled dataset of tokens in the specific format required by DistilBERT
+    Input: tokens, labels
+    Output: SarcasmDataset object
+    """
+
     def __init__(self, tokens=None, labels=None) -> None:
         self.tokens = tokens
         self.labels = labels
@@ -64,6 +77,10 @@ class SarcasmDataset(Dataset):
         train_indices: Optional[np.ndarray] = None,
         val_indices: Optional[np.ndarray] = None
     ) -> Tuple[SarcasmDataset, SarcasmDataset]:
+        """
+        Creates a train and a validation subset, from a given dataset
+        """
+
         tokens = np.array(self.tokens)
         labels = np.array(self.labels)
 
@@ -83,6 +100,10 @@ class SarcasmDataset(Dataset):
         return train_subset, val_subset
 
     def reduce_dataset(self, data_size) -> SarcasmDataset:
+        """
+        Reduces a given dataset
+        """
+
         tokens = np.array(self.tokens)
         labels = np.array(self.labels)
 
@@ -96,6 +117,10 @@ class SarcasmDataset(Dataset):
 
 
 def train_model(model, train_loader, val_loader, num_epochs, learning_rate):
+    """
+    Trains and validates the model
+    """
+
     device = torch.device("mps")
     model.to(device)
 
@@ -120,6 +145,8 @@ def train_model(model, train_loader, val_loader, num_epochs, learning_rate):
                 input_ids = batch['input_ids'].to(device)
                 attention_mask = batch['attention_mask'].to(device)
                 labels = batch['labels'].to(device)
+
+                print(input_ids, attention_mask, labels)
 
                 outputs = model(input_ids, attention_mask=attention_mask)
                 loss = criterion(outputs.logits, labels)
@@ -192,6 +219,10 @@ def train_model(model, train_loader, val_loader, num_epochs, learning_rate):
 
 
 def evaluate_model(model, test_dataset):
+    """
+    Evaluates the model, returns the metrics and plots the ROC curve
+    """
+
     device = torch.device("mps")
     model.to(device)
 
@@ -267,6 +298,10 @@ def k_fold_cross_validation(
         num_epochs=1,
         learning_rate=3e-5
 ):
+    """
+    Performs k-Fold Cross Validation
+    """
+
     kf = KFold(n_splits=k_folds, shuffle=True)
     fold_accuracies = []
 
@@ -303,6 +338,10 @@ def k_fold_cross_validation(
 
 
 def objective(trial):
+    """
+    Objective function for Optuna used for hyperparameter tuning
+    """
+
     lora_alpha = trial.suggest_categorical("lora_alpha", [8, 16, 32])
     r = trial.suggest_categorical("r", [8, 16, 32])
     lora_dropout = trial.suggest_categorical("lora_dropout", [0.1, 0.2, 0.3])
@@ -370,6 +409,8 @@ if __name__ == "__main__":
         tokens=test_df['comment_tokenized'],
         labels=test_df['label']
     )
+
+    print(test[100])
 
     study = optuna.create_study(direction="maximize")
     study.optimize(objective, n_trials=3)
