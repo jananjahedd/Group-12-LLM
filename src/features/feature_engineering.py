@@ -80,25 +80,34 @@ class FeatureEngineering:
                              f"scores: {str(e)}")
             return
 
-    def add_time(self) -> None:
-        """Extrcat time based features from date or created_utc columns."""
-        try:
-            self._df['day_of_week'] = (
-                pd.to_datetime(self._df['created_utc']).dt.day_of_week
-            )
-            Logger.log_info("Successfully added day of the week.")
-        except Exception as e:
-            Logger.log_error(f"Error while adding days: {str(e)}")
-            return
-
-    def scale_data(self) -> None:
+    def scale_data(self, train_df: pd.DataFrame,
+                   test_df: pd.DataFrame) -> None:
         """Scale the numeric values in the data."""
         try:
             scaler = MinMaxScaler()
-            self._df[['score', 'ups', 'downs']] = (
-                scaler.fit_transform(self._df[['score', 'ups', 'downs']])
+
+            # Scale only the training data
+            train_df[['score', 'ups', 'downs']] = (
+                scaler.fit_transform(train_df[['score', 'ups', 'downs']])
             )
-            Logger.log_info("Successfully scaled the numeric data.")
+            # Use the same scaler to transform the test data
+            test_df[['score', 'ups', 'downs']] = (
+                scaler.transform(test_df[['score', 'ups', 'downs']])
+            )
+            Logger.log_info("Successfully scaled the numeric data in " +
+                            "train and test sets.")
+
+            splits_dir = root / 'data' / 'splits'
+            splits_dir.mkdir(parents=True, exist_ok=True)
+
+            # Save the datasets
+            train_df.to_csv(splits_dir / f'train_data_{self.suffix}.csv',
+                            index=False)
+            test_df.to_csv(splits_dir / f'test_data_{self.suffix}.csv',
+                           index=False)
+            Logger.log_info(f"The datasets were saved at {splits_dir}")
+
+            return train_df, test_df
         except Exception as e:
             Logger.log_error(f"Error while scaling the data: {str(e)}")
             return
@@ -110,16 +119,6 @@ class FeatureEngineering:
                                                  random_state=42)
             Logger.log_info("Successfully split the data into " +
                             "training and testing.")
-
-            splits_dir = root / 'data' / 'splits'
-            splits_dir.mkdir(parents=True, exist_ok=True)
-
-            # save the datasets
-            train_df.to_csv(splits_dir / f'train_data_{self.suffix}.csv',
-                            index=False)
-            test_df.to_csv(splits_dir / f'test_data_{self.suffix}.csv',
-                           index=False)
-            Logger.log_info(f"The datasets were saved at {splits_dir}")
 
             return train_df, test_df
 
@@ -153,6 +152,6 @@ if __name__ == "__main__":
         engineer.add_comment_length()
         engineer.add_sentiment()
         engineer.add_time()
-        engineer.scale_data()
         engineer._save_data()
-        engineer._splitting()
+        train, test = engineer._splitting()
+        engineer.scale_data(train, test)

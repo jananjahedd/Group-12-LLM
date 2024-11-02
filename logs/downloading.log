@@ -1,0 +1,10 @@
+2024-10-22 17:39:09,473 - root - INFO - Initializing class for downloading the aggle data.
+2024-10-22 17:39:09,474 - root - INFO - Downloading the datasets danofer/sarcasm to data/raw/
+2024-10-22 17:39:20,033 - root - INFO - Unzipping the data in 'data/raw/sarcasm.zip'...
+2024-10-22 17:39:20,678 - root - INFO - Data extracted to data/raw/sarcasm.zip
+2024-10-22 17:39:20,678 - root - INFO - Data downloaded successfully.
+2024-10-23 13:53:32,636 - root - INFO - Initializing class for downloading the aggle data.
+2024-10-23 13:53:32,636 - root - INFO - Downloading the datasets danofer/sarcasm to /Users/mede/Group-12-LLM/data/raw
+2024-10-23 13:53:40,749 - root - INFO - Unzipping the data in '/Users/mede/Group-12-LLM/data/raw/sarcasm.zip'...
+2024-10-23 13:53:41,393 - root - INFO - Data extracted to /Users/mede/Group-12-LLM/data/raw/sarcasm.zip
+2024-10-23 13:53:41,393 - root - INFO - Data downloaded successfully.

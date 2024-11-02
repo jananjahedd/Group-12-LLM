@@ -1,0 +1,20 @@
+2024-10-25 14:33:19,947 - INFO - Loading datasets...
+2024-10-25 14:33:20,550 - INFO - Dataset subset with 10% of the data created successfully.
+2024-10-25 14:34:39,907 - INFO - Fold 1/3
+2024-10-25 14:37:20,460 - INFO - prompt_distilbert Fold 1 - Epoch 1 - Train Loss: 0.0126 - Val Loss: 0.0029 - Val Accuracy: 0.7038 - Val ROC AUC: 0.7040
+2024-10-25 14:40:02,446 - INFO - prompt_distilbert Fold 1 - Epoch 2 - Train Loss: 0.0106 - Val Loss: 0.0029 - Val Accuracy: 0.7165 - Val ROC AUC: 0.7165
+2024-10-25 14:40:02,764 - INFO - Fold 2/3
+2024-10-25 14:42:44,215 - INFO - prompt_distilbert Fold 2 - Epoch 1 - Train Loss: 0.0103 - Val Loss: 0.0022 - Val Accuracy: 0.8230 - Val ROC AUC: 0.8229
+2024-10-25 14:45:26,133 - INFO - prompt_distilbert Fold 2 - Epoch 2 - Train Loss: 0.0082 - Val Loss: 0.0020 - Val Accuracy: 0.8252 - Val ROC AUC: 0.8253
+2024-10-25 14:45:26,359 - INFO - Fold 3/3
+2024-10-25 14:48:07,957 - INFO - prompt_distilbert Fold 3 - Epoch 1 - Train Loss: 0.0079 - Val Loss: 0.0012 - Val Accuracy: 0.9103 - Val ROC AUC: 0.9101
+2024-10-25 14:50:49,852 - INFO - prompt_distilbert Fold 3 - Epoch 2 - Train Loss: 0.0056 - Val Loss: 0.0010 - Val Accuracy: 0.9289 - Val ROC AUC: 0.9288
+2024-10-25 14:50:50,101 - INFO - Fold 1/3
+2024-10-25 14:53:17,419 - INFO - distilbert Fold 1 - Epoch 1 - Train Loss: 0.0124 - Val Loss: 0.0029 - Val Accuracy: 0.7066 - Val ROC AUC: 0.7066
+2024-10-25 14:55:44,371 - INFO - distilbert Fold 1 - Epoch 2 - Train Loss: 0.0106 - Val Loss: 0.0029 - Val Accuracy: 0.7159 - Val ROC AUC: 0.7159
+2024-10-25 14:55:44,619 - INFO - Fold 2/3
+2024-10-25 14:58:11,842 - INFO - distilbert Fold 2 - Epoch 1 - Train Loss: 0.0103 - Val Loss: 0.0021 - Val Accuracy: 0.8137 - Val ROC AUC: 0.8141
+2024-10-25 15:00:38,730 - INFO - distilbert Fold 2 - Epoch 2 - Train Loss: 0.0083 - Val Loss: 0.0020 - Val Accuracy: 0.8228 - Val ROC AUC: 0.8227
+2024-10-25 15:00:38,952 - INFO - Fold 3/3
+2024-10-25 15:03:05,853 - INFO - distilbert Fold 3 - Epoch 1 - Train Loss: 0.0079 - Val Loss: 0.0011 - Val Accuracy: 0.9334 - Val ROC AUC: 0.9333
+2024-10-25 15:05:33,211 - INFO - distilbert Fold 3 - Epoch 2 - Train Loss: 0.0056 - Val Loss: 0.0010 - Val Accuracy: 0.9259 - Val ROC AUC: 0.9260

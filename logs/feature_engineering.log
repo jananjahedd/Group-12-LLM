@@ -1,0 +1,16 @@
+2024-11-02 14:25:21,693 - root - INFO - Feature engineering class is initialized.
+2024-11-02 14:25:31,951 - root - INFO - The data has been loaded successfully.
+2024-11-02 14:25:32,545 - root - INFO - Successfully added the comments length.
+2024-11-02 14:29:17,565 - root - INFO - Successfully added the sentiment scores.
+2024-11-02 14:29:33,946 - root - INFO - Successfully saved the modified data at /scratch/s5130727/Group-12-LLM/data/processed/normalized_sarcasm_bert.csv
+2024-11-02 14:29:34,312 - root - INFO - Successfully split the data into training and testing.
+2024-11-02 14:29:34,337 - root - INFO - Successfully scaled the numeric data in train and test sets.
+2024-11-02 14:29:53,727 - root - INFO - The datasets were saved at /scratch/s5130727/Group-12-LLM/data/splits
+2024-11-02 14:29:53,727 - root - INFO - Feature engineering class is initialized.
+2024-11-02 14:30:04,086 - root - INFO - The data has been loaded successfully.
+2024-11-02 14:30:04,714 - root - INFO - Successfully added the comments length.
+2024-11-02 14:33:50,654 - root - INFO - Successfully added the sentiment scores.
+2024-11-02 14:34:07,052 - root - INFO - Successfully saved the modified data at /scratch/s5130727/Group-12-LLM/data/processed/normalized_sarcasm_distilbert.csv
+2024-11-02 14:34:07,457 - root - INFO - Successfully split the data into training and testing.
+2024-11-02 14:34:08,151 - root - INFO - Successfully scaled the numeric data in train and test sets.
+2024-11-02 14:34:27,463 - root - INFO - The datasets were saved at /scratch/s5130727/Group-12-LLM/data/splits

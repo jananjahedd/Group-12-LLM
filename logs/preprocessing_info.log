@@ -1,0 +1,15 @@
+2024-10-24 17:43:09,564 - root - INFO - Preprocessing class is initialized.
+2024-10-24 17:43:11,712 - root - INFO - The data has been loaded successfully.
+2024-10-24 17:43:11,730 - root - INFO - Found 55 missing comments in the data. Dropping them...
+2024-10-24 17:43:11,841 - root - INFO - Successfully handled missing values.
+2024-10-24 17:43:18,344 - root - INFO - Successfully expanded the contractions in both 'comment' and 'parent_comment' columns.
+2024-10-24 17:43:18,626 - root - INFO - Successfully lowered the text from both 'comment' and 'parent_comment' columns.
+2024-10-24 17:43:19,633 - root - INFO - Removed punctuation characters: {'4', '0', '[', '&', '7', '/', '3', '|', '>', '\\', ']', '.', '9', '^', '=', '-', '8', ')', '@', '2', '?', '+', '_', ';', '%', '(', '`', '*', '~', '#', '5', ',', '\x08', '{', '!', '1', '6', '}', ':', '$', "'", '"'}
+2024-10-24 17:43:21,627 - root - INFO - Successfully removed all punctuation special characters from both 'comment' and 'parent_comment' columns.
+2024-10-24 17:43:24,287 - root - INFO - Processed file saved at /Users/mede/Group-12-LLM/data/processed/processed_sarcasm_backup.csv.
+2024-10-24 17:47:46,905 - root - INFO - Successfully tokenized the comments using BERT tokenizer.
+2024-10-24 17:47:47,288 - root - INFO - Dropped rows with empty comments.
+2024-10-24 17:48:04,897 - root - INFO - Processed file saved at /Users/mede/Group-12-LLM/data/processed/processed_sarcasm_bert.csv.
+2024-10-24 17:52:19,303 - root - INFO - Successfully tokenized the comments using DistilBERT tokenizer.
+2024-10-24 17:52:19,707 - root - INFO - Dropped rows with empty comments.
+2024-10-24 17:52:37,040 - root - INFO - Processed file saved at /Users/mede/Group-12-LLM/data/processed/processed_sarcasm_distilbert.csv.
