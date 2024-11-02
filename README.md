@@ -4,7 +4,7 @@
 
 ## Group 12
 
-The repository contains the necessary files to investigate our research involving Large Language Models (LLMs). The study involves comparing the performances of the existing models - GPT-4 and Google Gemini - after fine-tuning them with Low Rank Adaptation (LoRA) method on sarcasm detection.
+The repository contains the necessary files to investigate our research involving Large Language Models (LLMs). The study involves comparing the performances of the existing models - BERT and Distilbert - after fine-tuning them with Low Rank Adaptation (LoRA) and prompt engineering method on sarcasm detection.
 
 
 ## Dataset Download via Kaggle API
